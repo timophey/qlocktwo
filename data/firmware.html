@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Firmware update</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="bootstrap.min.css">
+    </head>
+    <body>
+        <div class="container">
+            <h1>Upload new Firmware</h1>
+			
+			<h2>Upload Flash Bin</h2>
+			<form method='post' enctype='multipart/form-data' action='/firmware'>
+				<input type='file' accept='.bin,.bin.gz' name='firmware'><input type='submit' value='Upload FLASH Bin'>
+			</form>
+			
+			<h2>Upload FS Bin</h2>
+			<form method='post' enctype='multipart/form-data' action='/firmware'>
+				<input type='file' accept='.bin,.bin.gz' name='filesystem'><input type='submit' value='Upload LittleFS   Bin'>
+			</form>
+        </div>
+    </body>
+</html>

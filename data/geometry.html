@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title data-loc="index_home">WordClock System Config</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="icomoon.css">
+<!--    <link rel="shortcut icon" href="/favicon.jpg">-->
+<!--    <link rel="apple-touch-icon" href="/favicon.jpg"/>-->
+    <script src="locale.js"></script>
+    <script src="babel.min.js"></script>
+    <script src="react-with-dom.min.js"></script>
+    <script src="jquery-3.4.1.min.js"></script>
+    <script src="jquery.qrcode.min.js"></script>
+    <link rel="stylesheet" href="qlocktwo.css">
+    <link rel="stylesheet" href="font.css">
+</head>
+<body>
+
+<div class="container">
+    <div
+            class="qlocktwo qlocktwo--touch qlocktwo--text qlocktwo--reflection__ qlocktwo--shadow qlocktwo--fill-screen qlocktwo--lang-RU"
+            style="color:rgba(255,255,255, 0.99);min-height: 1em;">
+        <div id="app" class="playground"><img src="atom.svg"></div>
+    </div>
+</div>
+<script type="text/babel" src="app.common.jsx"></script>
+<script type="text/babel" src="geometry.react.jsx"></script>
+<script type="text/babel">ReactDOM.render(<App_Geometry/>, document.getElementById("app"));</script>
+<style>
+    .qrcode{
+        border:1em solid white;
+        background: white;
+        display: inline-block;
+    }
+</style>
+</body>
+</html>

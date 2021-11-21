@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'Glasten';
+    src: url('Glasten.woff2') format('woff2'),
+        url('Glasten.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
