@@ -59,6 +59,13 @@ void CL_App::setup(){
   this->Term.onConnectWifi([this](const char* u,const char* p){ this->Network->connect(u,p);delay(5);});
   this->Term.onDateShow([this](){this->i2c.i2c_rtc_serialprint();});
 
+  this->Cron = new CL_Cron();
+  this->Cron->onRunCmd([this](String m){
+    Serial.println("Cmd from cron:");
+    Serial.println(m);
+    this->Network->Server81.internalMessage(m);
+    });
+  
 
   i2c.begin();
   
@@ -120,6 +127,18 @@ void CL_App::scheduled500(){
   }
 
 void CL_App::scheduled1000(){
+    if(this->i2c.getSeconds() == 0){
+      this->Cron->setNow(
+        this->i2c.getMinutes(),
+        this->i2c.getHours(),
+        this->i2c.rtc->day(),
+        this->i2c.rtc->month(),
+        this->i2c.rtc->dayOfWeek()
+      );
+    }
+}
+
+void CL_App::scheduledHourMin(){
     this->showTimeWords();
 //  this->showNumberTest();
     //this->Display->showTimeWords(41,true);

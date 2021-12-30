@@ -20,8 +20,15 @@ void CN_WS::loop(){
 
 void CN_WS::onWsEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length){
   if (type == WStype_TEXT){
+    String cmd = "";for(int i=0; i < length; i++){cmd+=(char)payload[i];}
+    this->onWsEventStr(num, type, cmd);
+    }
+  }
+  
+void CN_WS::onWsEventStr(uint8_t num, WStype_t type, String cmd){
+  if (type == WStype_TEXT){
 
-   String cmd = "";for(int i=0; i < length; i++){cmd+=(char)payload[i];}
+//   cmd
     
     // JSON
     DynamicJsonDocument doc(1024);

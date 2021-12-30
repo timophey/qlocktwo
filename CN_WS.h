@@ -55,11 +55,20 @@ class CN_WS{
     void onUpdateNTP(voidFunction cb){_cbUpdateNTP = cb;}
     void runUpdateNTP(){if(_cbUpdateNTP){_cbUpdateNTP();}}
 
+    typedef std::function<void(uint8_t,uint8_t,int)> SetPixelFunction;
+    SetPixelFunction _setPixel;
+    void onSetPixel(SetPixelFunction cb){_setPixel = cb;}
+    void runSetPixel(uint8_t x, uint8_t y, int v) {if(_setPixel) {_setPixel(x,y,v);}}
+
+
 
     void begin(void);
     void loop(void);
     static void event(uint8_t, WStype_t, uint8_t * ,size_t);
+    
     void onWsEvent(uint8_t, WStype_t, uint8_t * ,size_t);
+    void onWsEventStr(uint8_t, WStype_t, String);
+    
     void sendNow(uint8_t);
     void sendString(String response, uint8_t num = 0);
     WebSocketsServer* wss;
@@ -95,6 +104,13 @@ class CN_WS{
       const char * ssid = ssid_str.c_str();
       const char * pass = pass_str.c_str();
       if(_ConnectWifi) _ConnectWifi(ssid, pass);
+      }
+
+    void internalMessage(String m){
+//      uint8_t pl[m.length()];
+//      const char* plc = m.c_str();
+//      for(int i=0; i<m.length(); i++) pl[i] = plc[i];
+      onWsEventStr(0, WStype_TEXT, m);
       }
     
     

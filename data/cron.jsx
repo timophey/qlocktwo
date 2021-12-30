@@ -17,10 +17,13 @@ class App_Cron extends App_Common{
         fetch('/'+this.filename)
             .then((response) => {
                 return response.json();
+            },(response) => {
+                console.log('fail',response);
             }).then(that.onFetchFile.bind(that));
     }
     onFetchFile(config){
-        this.setState({items:config.items})
+        if(typeof config == 'object')
+            this.setState({items:config.items})
     }
     componentDidMount(){
         this.fetchData();
@@ -56,9 +59,9 @@ class App_Cron extends App_Common{
             <li className="pop_header text-right">
                 <a href="/"><span className="icon-house"></span></a>
             </li>
-            {this.state.items.map(function(item,i){
+            {(this.state.items)?this.state.items.map(function(item,i){
                 return <App_CronItem item={item} index={i} key={i} onUpdate={that.handlerUpdateItem.bind(that,i)} />
-            })}
+            }):<li>Emply List</li>}
             <li className="text-right">
                 <a onClick={this.handlerAddItem.bind(this)}>[+]</a>
             </li>
@@ -82,6 +85,7 @@ class App_CronItem extends React.Component{
     commands = [
         {t:'reloadColors',agrs:0},
         {t:'setConfig',args:1},
+        {t:'updatentp',args:0,label:'Update by NTP'},
     ]
     componentDidMount(){
         this.setState({item:this.props.item});
@@ -121,9 +125,11 @@ class App_CronItem extends React.Component{
         };
         // текущая команда
         let _cmd = this.commands.filter(function (cmd) {
+            console.log(item);
             return (!!item) ? (cmd.t == item.cmd) : false;
         });
         let cmd = (_cmd)? _cmd[0] : this.commands[0];
+        console.log(cmd);
         // рендер
         return (this.state.edit)?<li>
             <div className="clearfix">
@@ -141,7 +147,7 @@ class App_CronItem extends React.Component{
                 <input className="ci0" value={item.time.w} onChange={this.handleSetItemTime.bind(this,'w')} placeholder="w"/>
             </div>
             <div className="text-nowrap">
-                cmd <select onChange={(e,a)=>{ that.state.item.cmd = e.target.value; that.setState(that.state); }} value={item.cmd}>{this.commands.map((e,i)=>{ return <option key={i}>{e.t}</option> })}</select>
+                cmd <select onChange={(e,a)=>{ that.state.item.cmd = e.target.value; that.setState(that.state); }} value={item.cmd}>{this.commands.map((e,i)=>{ return <option key={i} value={e.t}>{((e.label)?e.label:e.t)}</option> })}</select>
             </div>
             {argf(cmd.args)}
             <hr/>
