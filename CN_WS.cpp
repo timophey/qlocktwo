@@ -180,7 +180,8 @@ void CN_WS::onWsEventStr(uint8_t num, WStype_t type, String cmd){
       }
     if(doc["cmd"] == "setPixel" && doc["x"] > -1 && doc["y"] > -1 && doc["value"] > -1){ // 
       /* this.sendWS({cmd:"setPixel",x:x,y:y,value:0xFFFFFF}); */
-      Serial.printf("WS: setPixel %d,%d,%d \n\r",doc["x"].as<int>(),doc["x"].as<int>(),doc["value"].as<int>());
+      runSetPixel(doc["x"].as<int>(),doc["y"].as<int>(),doc["value"].as<int>());
+//      Serial.printf("WS: setPixel %d,%d,%d \n\r",doc["x"].as<int>(),doc["x"].as<int>(),doc["value"].as<int>());
       }
     
 

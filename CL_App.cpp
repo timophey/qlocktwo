@@ -51,6 +51,11 @@ void CL_App::setup(){
   this->Network->Server81.onConfig([this](uint8_t i, bool write){ 
     if(write){this->Config->save(i);}else{this->Config->load(i);}
     });
+
+  this->Network->Server81.onSetPixel([this](uint8_t x, uint8_t y, int v){
+    this->Display->setPixel(x,y,v);
+    this->Display->printMatrix();
+    });
   
   this->Network->onSetLed(std::bind(&CL_App::setLed, this, _1, _2));
   this->Network->onShowProgress([this](uint8_t i){ this->Display->showProgress(i); });
@@ -147,6 +152,7 @@ void CL_App::scheduledHourMin(){
 void CL_App::showNumberTest(){
   this->Display->showTimeWords(++numb,0);
   }
+
 void CL_App::showTimeWords(){
     uint8_t h = i2c.getHours();
     uint8_t m = i2c.getMinutes();

@@ -27,10 +27,14 @@ class CL_Display{
 
     void setTimers(void);
     void stopTimers(void);
+
+    void setPixel(uint8_t x,uint8_t y,int v);
+    void printMatrix();
     
     CRGB leds[NUM_LEDS];
     CRGB main_color = CRGB(250,250,250);//CRGB::White;
     CHSV main_chsv = CHSV(250,250,250);
+    CRGB lead_color = CRGB::White;
     bool sd[NUM_LEDS]; // shift direction
     bool sd_def = false;
     uint8_t br[NUM_LEDS];

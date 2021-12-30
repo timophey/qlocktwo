@@ -274,29 +274,56 @@ void CL_Display::_clear(bool tail){
 void CL_Display::frameReady(){_frameReady=true;}
 void CL_Display::showFastLED(){if(_frameReady){FastLED.show();_frameReady=false;/*delay(5);*/}}
 void CL_Display::reloadColors(){
+ 
   uint8_t main_hue = EEPROM.read(0x0D);
+  config = EEPROM.read(0x03);
+  config2 = EEPROM.read(0x05);
+
+  // random Hue
   if(bitRead(config, 7)) main_hue = random(0,255);
-  main_chsv = CHSV(main_hue,EEPROM.read(0x0E),EEPROM.read(0x0F));
+    main_chsv = CHSV(main_hue,EEPROM.read(0x0E),EEPROM.read(0x0F));
+  
+  // assign main color
   if(bitRead(config, 0)){
     hsv2rgb_rainbow( main_chsv, main_color);
     }else{
     main_color = CRGB(EEPROM.read(0x10),EEPROM.read(0x11),EEPROM.read(0x12));
     }
+
+  // assign lead color
+  lead_color = CRGB(EEPROM.read(0x18),EEPROM.read(0x19),EEPROM.read(0x1A));
   
-  
-  config = EEPROM.read(0x03);
-  Serial.printf("main_chsv = CHSV(%d,%d,%d)\n\r",main_chsv.h,main_chsv.s,main_chsv.v);
-  Serial.printf("main_color = CRGB(%d,%d,%d)\n\r",main_color.r, main_color.g, main_color.b);
+  Serial.printf("main_chsv = CHSV(%d,%d,%d); ",main_chsv.h,main_chsv.s,main_chsv.v);
+  Serial.printf("main_color = CRGB(%d,%d,%d); ",main_color.r, main_color.g, main_color.b);
+  Serial.println(config,BIN);
+
   _downdCandle = EEPROM.read(0x13);
   _stepdCandle = EEPROM.read(0x14);
   _switchDelay = EEPROM.read(0x15);
   _delayCandle = EEPROM.read(0x17);
+
   // начальное направление
   if(bitRead(config, 2)) sd_def = true;
   if(bitRead(config, 1)) sd_def = false;
   for(int i=0; i<NUM_LEDS; i++) sd[i]=sd_def;
   
-  Serial.println(config,BIN);
   setTimers();
 //  Serial.println("CL_Display::reloadColors");
+  }
+
+
+void CL_Display::setPixel(uint8_t x,uint8_t y,int v){
+  matrix[x][y] = v;
+  }
+
+void CL_Display::printMatrix(){
+  uint8_t x, y;
+  for(uint8_t n=0; n<110; n++){
+    x=n / 10;
+    y=n % 10; if(x % 2 == 0) y = 9 - y;
+    leds[n] = matrix[x][y];
+    Serial.printf("n=%d; x=%d; y=%d; v=(%d,%d,%d);\r\n",n,x,y,leds[n].r,leds[n].g,leds[n].b);
+    }
+//  frameReady();
+  FastLED.show();
   }
