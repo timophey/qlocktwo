@@ -9,7 +9,7 @@ CL_App App;
 void setup() {
 //  pinMode(D0, OUTPUT);
 //  digitalWrite(D0, LOW);
-    App.setup();
+      App.setup();
 }
 
 void loop() {

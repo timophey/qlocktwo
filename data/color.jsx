@@ -45,6 +45,7 @@ class App_Colors extends App_Common{
             3: 'fall to 0',
             4: 'fall to 255',
             5: 'bounce',
+            6: 'use Candle',
             7: 'random Hue',
         }
 
@@ -52,10 +53,21 @@ class App_Colors extends App_Common{
             0: 'Leading One',
         }
 
+        let byte_conf1bin = parseInt(ee[0x03]).toString(2);
+        let byte_conf1 = "0".repeat(8 - byte_conf1bin.length) + byte_conf1bin;
+        console.log('byte_conf1',byte_conf1);
+
         let byte_conf2bin = parseInt(ee[0x05]).toString(2);
         let byte_conf2 = "0".repeat(8 - byte_conf2bin.length) + byte_conf2bin;
         console.log('byte_conf2',byte_conf2);
 
+        if(byte_conf1[1]==0){
+            delete byte_conf_keys[1];
+            delete byte_conf_keys[2]
+            delete byte_conf_keys[3]
+            delete byte_conf_keys[4];
+            delete byte_conf_keys[5];
+        }
 
         return <ul className="qlocktwo__letters text-left">
             <li className="pop_header text-right">
@@ -63,47 +75,51 @@ class App_Colors extends App_Common{
             </li>
             <li className="i-split">Таймеры</li>
             <li className="i-split">
-                <label>Задержка ЧМ: {ee[0x15]/10} сек</label>
+                <label>Таймер ЧМ: {ee[0x15]/10} сек</label>
                 <InputRange value={ee[0x15]} addr={0x15} onUpdateCmd="reloadColors" min={20} max={250}/>
             </li>
             <li className="i-split">
-                <label>Задержка печати: {ee[0x16]/1000} сек</label>
+                <label>Таймер печати: {ee[0x16]/1000} сек</label>
                 <InputRange value={ee[0x16]} addr={0x16} onUpdateCmd="reloadColors" min={5} max={250}/>
             </li>
             <li>&nbsp;</li>
-            <li className="i-split">Оттенок</li>
+
             <li className="i-split">
-                <label>Основной цвет: <InputColorPicker
+                <label data-random={byte_conf1[0]=="1" && byte_conf1[7]=="1"} class="pickerHolder">Основной цвет: <InputColorPicker
                     id="main"
                     hsv={{h: ee[0x0D], s: ee[0x0E], v: ee[0x0F]}}
                     value={{r: ee[0x10], g: ee[0x11], b: ee[0x12]}}
                     onUpdate={this.updateHandler.bind(this)}
                 /></label>
             </li>
-            <li className="i-split">
-                <label>Падение яркости: {ee[0x13]}</label>
-                <InputRange value={ee[0x13]} addr={0x13} onUpdateCmd="reloadColors"/>
-            </li>
-            <li className="i-split">
-                <label>Шаг падения: {ee[0x14]}</label>
-                <InputRange value={ee[0x14]} addr={0x14} onUpdateCmd="reloadColors" max={64}/>
-            </li>
-            <li className="i-split">
-                <label>Таймер мерцания: {ee[0x17]/1000} сек</label>
-                <InputRange value={ee[0x17]} addr={0x17} onUpdateCmd="reloadColors" min={5} max={250}/>
-            </li>
             <li>
                 <Flags keys={byte_conf_keys} value={ee[0x03]} addr={0x03} onUpdateCmd="reloadColors"/>
                 <Flags keys={byte_conf2keys} value={ee[0x05]} addr={0x05} onUpdateCmd="reloadColors"/>
             </li>
-            {(byte_conf2[7]=="1")?<li>
-                <label>Ведущий цвет: <InputColorPicker
+            <li>
+                <label data-hidden={byte_conf2[7]==0}>Leading Pixel: <InputColorPicker
                     id="lead"
                     value={{r: ee[0x18], g: ee[0x19], b: ee[0x1A]}}
                     onUpdate={this.updateLeadingHandler.bind(this)}
                 /></label>
-            </li>:""}
+            </li>
+            {/* <li className="i-split">Оттенок</li> */}
+            <li className="i-split" data-hidden={byte_conf1[1]==0}>
+                <label>Candle dx max: {ee[0x13]}</label>
+                <InputRange value={ee[0x13]} addr={0x13} onUpdateCmd="reloadColors"/>
+            </li>
+            <li className="i-split" data-hidden={byte_conf1[1]==0}>
+                <label>Candle dx step: {ee[0x14]}</label>
+                <InputRange value={ee[0x14]} addr={0x14} onUpdateCmd="reloadColors" max={64}/>
+            </li>
+            <li className="i-split" data-hidden={byte_conf1[1]==0}>
+                <label>Candle timer: {ee[0x17]/1000} сек</label>
+                <InputRange value={ee[0x17]} addr={0x17} onUpdateCmd="reloadColors" min={5} max={250}/>
+            </li>
             {(this.state.commited == false)?[<li>&nbsp;</li>,<li><a className="i-split" onClick={this.sendAction.bind(this,"commit",false)}>Запомнить</a></li>]:""}
+            <style>
+            
+            </style>
         </ul>
     }
 
@@ -155,8 +171,9 @@ class InputColorPicker extends Component_Common{
         var c = "rgb("+v.r+","+v.g+","+v.b+")";
         console.log('c',this.state);
         let block = <div
-            style={{display:"inline-block",backgroundColor:c,height:"1em",width:"1em",verticalAlign: "middle"}}
+            style={{display:"inline-block",backgroundColor:c,height:"1em",width:"1em",verticalAlign: "middle",border: "2px solid #fff"}}
             onClick={this.togglePopup.bind(this)}
+            className="preview"
         ></div>;
 
         if(this.state.popup){ //

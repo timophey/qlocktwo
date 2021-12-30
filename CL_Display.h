@@ -45,6 +45,8 @@ class CL_Display{
     Ticker _TickerFrame;
     Ticker _TickerCandle;
     Ticker _TickerPrint;
+    uint8_t _LPP = 1;  // last Printed Pixel
+    uint8_t _LPPL = 1; // last Printed Pixel by default
 
     uint8_t _delayFrame = 20;
     uint8_t _delayCandle = 15;
@@ -121,9 +123,10 @@ class CL_Display{
       {64, 75,  84, 95, 104}, // 40
       {49, 50,  69,  70, 255, 8, 11, 73, 86, 93}, // 50
       };
+    uint8_t _HLiterator = 0;  // just counter
     uint8_t hl[3][5]{
       {4,15,24,35,44}, // часов
-      {74,85,94},      // час
+      {74,85,94},      // час (справа)
       {74,85,94,105},  // часа
       };
     uint8_t ml[3][6]{

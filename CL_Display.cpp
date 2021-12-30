@@ -23,10 +23,17 @@ void CL_Display::begin(){
 
 void CL_Display::setTimers(){
   _TickerFrame.attach_ms_scheduled(20, std::bind(&CL_Display::showFastLED, this));
-  if(bitRead(config, 0)){
-    _TickerCandle.attach_ms_scheduled(_delayCandle, std::bind(&CL_Display::CandleHSV, this));
+  
+  if(bitRead(config, 6)){ /* Run candle or not */
+    if(bitRead(config, 0)){ /* Candle RGB or HSV */
+      _TickerCandle.attach_ms_scheduled(_delayCandle, std::bind(&CL_Display::CandleHSV, this));
+      }else{
+      _TickerCandle.attach_ms_scheduled(_delayCandle, std::bind(&CL_Display::Candle, this));    
+      }
     }else{
-    _TickerCandle.attach_ms_scheduled(_delayCandle, std::bind(&CL_Display::Candle, this));    
+      if(_TickerCandle.active()){
+        _TickerCandle.detach();
+        }
     }
   uint8_t _pd = EEPROM.read(0x16); if(_pd == 0 || _pd == 255) _pd = 64;
   _TickerPrint.attach_ms_scheduled(_pd, std::bind(&CL_Display::_type, this));
@@ -70,8 +77,8 @@ bool CL_Display::showTimeWords(uint8_t d, uint8_t unit_t, bool st){
     if(is_min && 
         (
           (d > 0) && (d < 3) 
-          || (d10 == 5) && (d0==5) && st
-          || (d10 == 2 || d10 == 4) && (d0==3)
+          || (d10 == 5) && (d0==5) && st /** 55 */
+          || (d10 == 2 || d10 == 4) && (d0==3) /** 2x 4x && x3 */
         )
       ){
       this->lightsUp(y00[d0],4); // одна/две/ 55 / 43
@@ -100,9 +107,13 @@ bool CL_Display::showTimeWords(uint8_t d, uint8_t unit_t, bool st){
   }
   if(unit_t == 1){
 //    Serial.println("hour");
-    if(d==1) this->lightsUp(hl[1],3); 
-    else if(d>=2 && d<=4) this->lightsUp(hl[2],4);
-    else this->lightsUp(hl[0],5);
+    if(d==1){
+      uint8_t pos = _HLiterator % 2;
+      this->lightsUp(hl[pos],3);              // x1
+    }
+    else if(d>=2 && d<=4) this->lightsUp(hl[2],4); // x2,x3,x4
+    else this->lightsUp(hl[0],5);                  // ...
+    _HLiterator++;
   }
 
   //print_buffer_shifed = print_buffer_size;
@@ -193,6 +204,7 @@ void CL_Display::CandleHSV(){
 //  int c0 = _stepdCandle;
 //  int c1 = _downdCandle;
   for(int i=0; i<NUM_LEDS; i++){
+    if(i==_LPP) continue;
     CRGB rgb = leds[i];
     CHSV chsv = main_chsv;
     uint8_t rgbMin, rgbMax;
@@ -263,16 +275,20 @@ void CL_Display::_type(){
   if(print_buffer_size == 0) return; // CRGB::White;//
   uint8_t l = print_buffer[0]; 
   if(bitRead(config2, 0)){
-    leds[l] = lead_color;//CRGB(main_color.r,main_color.g,main_color.b);
+    if(l    != _LPPL) leds[l] = lead_color;//CRGB(main_color.r,main_color.g,main_color.b);
+    if(_LPP != _LPPL) leds[_LPP] = main_color;
   }else{
-    leds[l] = CRGB(main_color.r,main_color.g,main_color.b);
+    if(l    != _LPPL) leds[l] = main_color;//CRGB(main_color.r,main_color.g,main_color.b);
     }
+
+  // 
+  _LPP = l;
 
 //  Serial.printf("P [%d] %d CRGB(%d,%d,%d)\n\r",print_buffer_sUize,l,main_color.red,main_color.green,main_color.blue);
   // shift main buffer
   //for(uint8_t i=0; i < print_buffer_size; i++) Serial.printf("%d,",print_buffer[i]); Serial.println();
   for(uint8_t i=0; i < print_buffer_size; i++) print_buffer[i] = print_buffer[i+1]; print_buffer_size--;
-  
+  if(print_buffer_size == 0 && _LPP != _LPPL) type(_LPPL);
   // commit
   frameReady();
   }

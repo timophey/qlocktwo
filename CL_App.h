@@ -76,6 +76,7 @@ EEPROM map
   3: fall to 0
   4: fall to 255
   5: bounce
+  6: candle
   7: random Hue
   
 
