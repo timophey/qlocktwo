@@ -4,7 +4,7 @@ void CL_Wire::begin(){
   Wire.begin(DS3231_SDA, DS3231_SCL);
   i2c_scan();
   if(i2c_rtc_addr){
-    this->rtc = new uRTCLib(i2c_rtc_addr,URTCLIB_MODEL_DS1307);//,URTCLIB_MODEL_DS3231
+    this->rtc = new uRTCLib(i2c_rtc_addr,URTCLIB_MODEL_DS3231);//,URTCLIB_MODEL_DS3231
     //this-> rtc->set(0, 42, 16, 6, 2, 5, 15);
     _Ticker.attach_ms_scheduled(500,std::bind(&CL_Wire::i2c_rtc_update, this));
     }else{

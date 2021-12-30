@@ -3,10 +3,12 @@
 #include "CL_Wifi.h"
 #include "CL_Wire.h"
 #include "CL_Term.h"
-#include "CL_Display.h";
+#include "CL_Display.h"
 #include "Ticker.h"
 #include <stdlib.h>
-#include "CL_Config.h";
+#include "CL_Config.h"
+#include "CL_Cron.h"
+
 
 class CL_App{
   public:
@@ -25,17 +27,21 @@ class CL_App{
       void stopDisplayTimer(void);
       void reLoadHandler(void);
 
-      Ticker _Ticker500;
       Ticker _Ticker1000;
+      Ticker _Ticker500;
+      Ticker _TickerHM;
+//      Ticker _TickerSelf;
 
-      void scheduled500(void);
       void scheduled1000(void);
+      void scheduled500(void);
+      void scheduledHourMin(void);
 
       CL_Display* Display;
       CL_Wifi* Network;
       CL_Term Term;
       CL_Wire i2c;
       CL_Config* Config;
+      CL_Cron* Cron;
       
       bool ss = false;
       bool st = false;

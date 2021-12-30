@@ -1,5 +1,4 @@
 #define DBG_OUTPUT_PORT Serial
-#define FTP_DEBUG 1;
 
 #include "CL_App.h"
 

@@ -1,22 +1,27 @@
 #include "CL_App.h"
 
-using namespace std::placeholders;
+#include <ESPDateTime.h>
 
 time_t myTimeCallback() {
   Serial.println("myTimeCallback");
+  Serial.printf("Date Now is %s\n", DateTime.toISOString().c_str());
   return 1455451200; // UNIX timestamp
 }
+
+using namespace std::placeholders;
+
   
 CL_App::CL_App(){}
 void CL_App::setup(){
   delay(2550);
+  // start hardware
+  Serial.begin(115200);
+  EEPROM.begin(512);
+
   // boot
   Serial.println();
   Serial.println("Qlocktwo by @tima_tey");
   Serial.printf("Build date: %s, time: %s\n\r",__DATE__,__TIME__);
-  // start hardware
-  Serial.begin(115200);
-  EEPROM.begin(512);
 
   Serial.print("Mounting FS... ");
   
@@ -70,9 +75,12 @@ void CL_App::setup(){
   // сеть будет какое-то время подниматься
   this->Display->reloadColors();
 
+
+
   setDisplayTimer();
-
-
+  
+//  _TickerSelf.attach_ms_scheduled(5,std::bind(&CL_App::loop, this));
+_Ticker1000.attach_ms_scheduled( 1000 ,std::bind(&CL_App::scheduled1000, this));
 
 }
 
@@ -84,7 +92,7 @@ void CL_App::reLoadHandler(){
   }
 
 void CL_App::setDisplayTimer(){
-  scheduled1000();
+  scheduledHourMin();
   setSwitchTimer();
   _Ticker500.attach_ms_scheduled(500,std::bind(&CL_App::scheduled500, this));
   this->Display->setTimers();
@@ -92,12 +100,12 @@ void CL_App::setDisplayTimer(){
 
 void CL_App::setSwitchTimer(){
   this->_switchDelay = this->Display->_switchDelay * 100;
-  _Ticker1000.attach_ms_scheduled( _switchDelay ,std::bind(&CL_App::scheduled1000, this)); // 5000  
+  _TickerHM.attach_ms_scheduled( _switchDelay ,std::bind(&CL_App::scheduledHourMin, this)); // 5000  
   }
 
 void CL_App::stopDisplayTimer(){
   _Ticker500.detach();
-  _Ticker1000.detach();
+  _TickerHM.detach();
   this->Display->stopTimers();
   }
 
