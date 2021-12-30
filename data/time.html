@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+	<title data-loc="index_time_config">Config time</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+	<script src="jquery-3.4.1.min.js"></script>
+	<script src="locale.js"></script>
+	<style>
+	  .led{width:20px;height:20px;display:inline-block;}
+	  .led .circle{width:20px;height:20px;border-radius:50%;}
+	  .playground tbody td{text-align:right;}
+	  .playground select, .playground select+b{
+		  font-size:30px;
+		  }
+	  .d.form-control{display:inline!important;width:auto;}
+	  .i-mode--current:after{/* content:" (is active now)"; */color:darkgreen;}
+	</style>
+	<link rel="stylesheet" href="bootstrap.min.css">
+
+</head>
+<body>
+	<div class="container">
+		<h1 data-loc="index_time_config">Real Time Clock</h1>
+		<div class="playground">
+			<!-- RTC -->
+			<fieldset class="form-group">
+				<legend class="i-mode" data-mode="0"><h2 data-loc="time_current">Current:</h2></legend>
+					<span class="text-nowrap">
+						<select id="dy" min="2000" max="2099" class="d dy form-control d-time"></select>
+						<b>-</b>
+						<select id="dm" min="1" max="12" class="d form-control d-time"></select>
+						<b>-</b>
+						<select id="dd" min="1" max="31" class="d form-control d-time"></select>
+					</span>
+					<b>&nbsp;</b>
+					<select id="dw" min="0" max="7" class="d form-control d-time"></select>
+					<b>&nbsp;</b>
+					<span class="text-nowrap">
+						<select id="dh" min="0" max="24" class="d form-control d-time"></select>
+						<b>:</b>
+						<select id="di" min="0" max="59" class="d form-control d-time"></select>
+						<b>:</b>
+						<select id="ds" min="0" max="59" class="d form-control d-time"></select>
+					</span>
+<!--					<b>&nbsp;</b>-->
+<!--					<select id="tz" min="-24" max="24" class="form-control d-time"></select>-->
+			</fieldset>
+			<fieldset class="form-group"><button class="action_settime btn btn-primary">
+				<span data-loc="time_set">Set</span> <span data-loc="time_device">from device</span>
+			</button></fieldset>
+			<hr>
+			<!-- timer -->
+			<fieldset class="form-group">
+				<legend class="i-mode" data-mode="1"><h2 data-loc="time_timer">Timer:</h2></legend>
+				<span class="text-nowrap">
+					<select id="th" min="0" max="96" class="d form-control i-timer"></select>
+					<b>:</b>
+					<select id="ti" min="0" max="59" class="d form-control i-timer"></select>
+					<b>:</b>
+					<select id="ts" min="0" max="59" class="d form-control i-timer"></select>
+				</span>
+				<span class="text-nowrap">
+					<b data-loc="time_timer_max">&nbsp;4 days max</b>
+				</span>
+			</fieldset>
+			<fieldset class="form-group">
+				<button class="action_timer_start btn btn-primary" data-loc="time_timer_start">Start</button>
+				<button class="action_timer_stop btn btn-primary" data-loc="time_timer_stop">Stop</button>
+				<label class="form-check-label">
+					&nbsp; <input type="checkbox" class="" id="timerFollow">&nbsp;<span data-loc="отслеживать экран">Follow display</span>
+				</label>
+			</fieldset>
+			<hr>
+			<!-- Countdown -->
+			<fieldset class="form-group">
+					<legend class="i-mode" data-mode="2" data-loc="time_countdown">Countdown to (set timer):</legend>
+						<span class="text-nowrap">
+							<select id="cy" min="2000" max="2099" class="d dy form-control d-countdown"></select>
+							<b>-</b>
+							<select id="cm" min="1" max="12" class="d form-control d-countdown"></select>
+							<b>-</b>
+							<select id="cd" min="1" max="31" class="d form-control d-countdown"></select>
+						</span>
+						<b>&nbsp;</b>
+						<span class="text-nowrap">
+							<select id="ch" min="0" max="24" class="d form-control d-countdown"></select>
+							<b>:</b>
+							<select id="ci" min="0" max="59" class="d form-control d-countdown"></select>
+							<b>:</b>
+							<select id="cs" min="0" max="59" class="d form-control d-countdown"></select>
+						</span>
+			</fieldset>
+			<fieldset class="form-group">
+					<button class="action_countdown_set btn btn-primary" data-loc="time_set">Set</button>
+					<button class="action_countdown_start btn btn-primary" data-loc="time_set_start">Set and start</button>
+			</fieldset>
+			<!-- Back -->
+			<hr>
+			<div><a href="/" class="btn btn-primary" data-loc="action_home">Go home</a></div>
+			
+		</div>
+        <footer class="footer mt-auto py-3">
+			<div class="container">
+				&copy; Timophey Lanevich, Cronixie 
+				<a href="https://vk.com/cronixie">[vk]</a>
+				<a href="https://instagram.com/cronixie">[inst]</a>
+			</div>
+		</footer>
+		<script>window.globalhost = "192.168.4.1"</script>
+		<script src="connect.js"></script>
+		<script src="time.js"></script>
+	</div>
+</body>
+</html>

@@ -457,13 +457,24 @@ bool CN_WebServer::handleFileRead(String path) { // send the right file to the c
       path += ".gz";                                         // Use the compressed verion
     this->httpd->sendHeader("Access-Control-Allow-Origin", "*");
     File file = LittleFS.open(path, "r");                    // Open the file
-    size_t sent = this->httpd->streamFile(file, contentType);    // Send it to the client
+    if(file.isFile()){
+      size_t sent = this->httpd->streamFile(file, contentType);    // Send it to the client
+    }
+    else{
+      String output = "<h1>"+path+"</h1>";
+      Dir dir= LittleFS.openDir(path);
+      while( dir.next())
+        {
+          String fn = dir.fileName();
+          output += "<li><a href='"+path+"/"+fn+"'>"+fn+"</a></li>";
+        }
+      this->httpd->send(200, "text/html", output);
+      }
     
     file.close();                                          // Close the file again
     Serial.println(String("Sent file: ") + path);
     
     return true;
-    
   }
   Serial.println(String("File Not Found: ") + path);   // If the file doesn't exist, return false
   return false;

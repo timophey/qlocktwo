@@ -54,6 +54,7 @@ class CL_Display{
     
     uint8_t _delayPrint = 64;
     uint8_t config;
+    uint8_t config2;
 
     void Candle(void);
     void CandleHSV(void);
@@ -130,8 +131,5 @@ class CL_Display{
       {40,59,60,79,80,100},// минута
       {40,59,60,79,80,99}, // минуты
       };
-
-    /* Матрица */
-//    CRGB matrix[11][10];
 
   };

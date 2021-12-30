@@ -1,7 +1,7 @@
 class App_Colors extends App_Common{
 
     addr_begin = 0x00;
-    addr_end = 0x17;
+    addr_end = 0x1A;
 
     updateHandler(e){
         document.body.style.backgroundColor = e.hexString;
@@ -24,6 +24,15 @@ class App_Colors extends App_Common{
         // this.setState({hsv:e.hsv});
     }
 
+    updateLeadingHandler(e){
+        let e_hsv = e.hsv;
+        sendWS({cmd:"setEEPROM",addr:0x18,value:e.red});
+        sendWS({cmd:"setEEPROM",addr:0x19,value:e.green});
+        sendWS({cmd:"setEEPROM",addr:0x1A,value:e.blue});
+        sendWS({cmd:"setEEPROM",addr:0x1B,value:e_hsv.h});
+        sendWS({cmd:"reloadColors"});
+    }
+
     // update
 
     render(){
@@ -36,8 +45,17 @@ class App_Colors extends App_Common{
             3: 'fall to 0',
             4: 'fall to 255',
             5: 'bounce',
-            7: 'random Hue'
+            7: 'random Hue',
         }
+
+        let byte_conf2keys = {
+            0: 'Leading One',
+        }
+
+        let byte_conf2bin = parseInt(ee[0x05]).toString(2);
+        let byte_conf2 = "0".repeat(8 - byte_conf2bin.length) + byte_conf2bin;
+        console.log('byte_conf2',byte_conf2);
+
 
         return <ul className="qlocktwo__letters text-left">
             <li className="pop_header text-right">
@@ -76,7 +94,15 @@ class App_Colors extends App_Common{
             </li>
             <li>
                 <Flags keys={byte_conf_keys} value={ee[0x03]} addr={0x03} onUpdateCmd="reloadColors"/>
+                <Flags keys={byte_conf2keys} value={ee[0x05]} addr={0x05} onUpdateCmd="reloadColors"/>
             </li>
+            {(byte_conf2[7]=="1")?<li>
+                <label>Ведущий цвет: <InputColorPicker
+                    id="lead"
+                    value={{r: ee[0x18], g: ee[0x19], b: ee[0x1A]}}
+                    onUpdate={this.updateLeadingHandler.bind(this)}
+                /></label>
+            </li>:""}
             {(this.state.commited == false)?[<li>&nbsp;</li>,<li><a className="i-split" onClick={this.sendAction.bind(this,"commit",false)}>Запомнить</a></li>]:""}
         </ul>
     }

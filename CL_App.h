@@ -50,6 +50,7 @@ class CL_App{
       int _switchDelay = 5000;
   };
 
+
 /*
 
 EEPROM map
@@ -80,6 +81,8 @@ EEPROM map
 
 0x04 - Timezone
 
+0x05 - led strip config byte #2
+  0: Leading One
 
 Color
 0x0D = 13 - Hue
@@ -95,6 +98,13 @@ Color
 0x15 = 21 - Switch Delay
 0x16 = 22 - Print Delay
 0x17 = 23 - Candle Delay
+
+Leading One
+0x18 = 24 - Red  
+0x19 = 25 - Green 
+0x1A = 26 - Blue
+0x1B = 27 - Hue
+
 
 0xD8 = 216 - Curent config Loaded
 

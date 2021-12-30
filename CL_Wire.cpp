@@ -125,7 +125,7 @@ void CL_Wire::i2c_rtc_settime(int s, int i, int h, int dOw, int d, int m, int y)
 void CL_Wire::esp_ntp_start(long offset){
 //      DateTime.setServer("pool.ntp.org");
 //      DateTime.setTimeZone(offset/3600);
-//      //DateTime.begin();
+        DateTime.begin();
 //      if (!DateTime.isTimeValid()) {
 //        Serial.println("ESPDateTime: Failed to get time from server.");
 //      }  

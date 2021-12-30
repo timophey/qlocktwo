@@ -1,3 +1,4 @@
 /data/.idea/
 /icomoon
 !/icomoon/selection.json
+/data/.vscode/sftp.json

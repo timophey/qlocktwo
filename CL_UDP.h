@@ -4,6 +4,7 @@
 #include <NTPClient.h>
 #include <DNSServer.h>
 #include <EEPROM.h>
+#include <ESPDateTime.h>
 #include <string>
 
 using namespace std;

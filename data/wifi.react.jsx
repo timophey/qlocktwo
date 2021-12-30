@@ -82,9 +82,6 @@ class App_Wifi extends App_Common {
             />
         })}</ul>
     }
-
-
-
 }
 
 class Connection extends Component_Common{
@@ -193,3 +190,4 @@ class Connection extends Component_Common{
 }
 
 ReactDOM.render(<App_Wifi/>, document.getElementById("app"));
+// =)

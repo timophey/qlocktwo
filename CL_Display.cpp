@@ -207,36 +207,44 @@ void CL_Display::CandleHSV(){
 
     // bounce
     if(bitRead(config, 5)){
-      if(sd[i]==true && (chsv.value + delta_v[i] + _stepdCandle) > 255){
-        sd[i]=false;
-//        Serial.printf("sd[i]==true, v=%d,dv=%d,s=%d \n\r",chsv.value,delta_v[i],_stepdCandle  );
+      uint8_t val_max = (chsv.value + _downdCandle <= 255 ) ? (chsv.value + _downdCandle) : 255;
+      uint8_t val_min = (chsv.value - _downdCandle >= 0)    ? (chsv.value - _downdCandle) : 0;
+
+      if(
+        (sd[i]==true && (chsv.value + delta_v[i] + _stepdCandle) > val_max)
+        ||
+        (sd[i]==false && (chsv.value + (delta_v[i] - _stepdCandle)) <= val_min )
+        ){
+//        sd[i]=false;
+        sd[i]=!sd[i];
         }
-      if(sd[i]==false && (chsv.value + (delta_v[i] - _stepdCandle)) <=0 ){
-        sd[i]=true;
-//        Serial.printf("sd[i]==false, v=%d,dv=%d,s=%d \n\r",chsv.value,delta_v[i],_stepdCandle  );
-        }
+
+//      if(sd[i]==false && (chsv.value + (delta_v[i] - _stepdCandle)) <= val_min ){
+//        sd[i]=true;
+//        }
 
 //      if(
 //        (sd[i]==true && (chsv.value + delta_v[i] + _stepdCandle) >= 255)
 //        ||
-//        (sd[i]==false && (chsv.value - delta_v[i] - _stepdCandle) <= 0)
+//        (sd[i]==false && (chsv.value + delta_v[i] - _stepdCandle) <= 0)
 //        ) sd[i] = !sd[i];
       }else{
         // fall into 0
         if(bitRead(config, 3) && sd[i]==false){
-    //      if(chsv.value - delta_v[i] == 0) continue;
-          if(chsv.value - delta_v[i] - _stepdCandle <= 0) delta_v[i] = chsv.value - _stepdCandle;
+          if(chsv.value + delta_v[i] - _stepdCandle <= 0) delta_v[i] = _stepdCandle - chsv.value;//chsv.value - _stepdCandle;
+//          Serial.printf("L[%d] D=%d;  v=(%d+%d)=%d; \n\r",i, delta_v[i], chsv.value, delta_v[i], (chsv.value+delta_v[i]));
           }
         
         // fall into 255
         if(bitRead(config, 4) && sd[i]==true){
-          if(chsv.value + delta_v[i] + _stepdCandle == 255) continue;
           if(chsv.value + delta_v[i] + _stepdCandle >= 255) delta_v[i] = 255-(chsv.value+_stepdCandle);
           }
       }
+//    Serial.printf("L[%d] v=%d, d=%d, v+d+s = %d\n\r;",i,chsv.value,delta_v[i],(chsv.value + delta_v[i] + _stepdCandle));
     delta_v[i] += _stepdCandle * ((sd[i]) ? 1 : -1);
     chsv.value += delta_v[i];// (sd[i]) ? (chsv.value + delta_v[i]) : (chsv.value - delta_v[i]);
-
+//    Serial.printf("L[%d] v=%d, d=%d, v     = %d\n\r;",i,chsv.value,delta_v[i],(chsv.value));
+    
     hsv2rgb_rainbow( chsv, leds[i]);
 //    hsv2rgb_spectrum( chsv, leds[i]);
     
@@ -253,8 +261,14 @@ void CL_Display::type(uint8_t l){
 
 void CL_Display::_type(){
   if(print_buffer_size == 0) return; // CRGB::White;//
-  uint8_t l = print_buffer[0]; leds[l] = CRGB(main_color.r,main_color.g,main_color.b);
-//  Serial.printf("P [%d] %d CRGB(%d,%d,%d)\n\r",print_buffer_size,l,main_color.red,main_color.green,main_color.blue);
+  uint8_t l = print_buffer[0]; 
+  if(bitRead(config2, 0)){
+    leds[l] = lead_color;//CRGB(main_color.r,main_color.g,main_color.b);
+  }else{
+    leds[l] = CRGB(main_color.r,main_color.g,main_color.b);
+    }
+
+//  Serial.printf("P [%d] %d CRGB(%d,%d,%d)\n\r",print_buffer_sUize,l,main_color.red,main_color.green,main_color.blue);
   // shift main buffer
   //for(uint8_t i=0; i < print_buffer_size; i++) Serial.printf("%d,",print_buffer[i]); Serial.println();
   for(uint8_t i=0; i < print_buffer_size; i++) print_buffer[i] = print_buffer[i+1]; print_buffer_size--;

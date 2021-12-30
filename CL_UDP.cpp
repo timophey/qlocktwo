@@ -122,6 +122,7 @@ void CL_UDP::update_event(){
     this->timeClient->getDay(),//+1
     ntp_d,ntp_m,ntp_y
     );
+  DateTime.setTime(this->timeClient->getEpochTime());
   }
 
 void CL_UDP::onUpdateEvent(THandlerFunction cbUpdateEvent){

@@ -1,4 +1,3 @@
-#define FTP_DEBUG true;
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 #include <ESP8266FtpServerLittleFS.h>
