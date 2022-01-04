@@ -51,6 +51,7 @@ bool CL_Display::showTimeWords(uint8_t d, uint8_t unit_t, bool st){
 //  Serial.printf("showTimeWords %d \r\n",d);
   this->lightsDown();
 //  this->_tail(); // _tail scheduled once below
+  shift_buffer_size = 0;
 
   uint8_t d10 = d / 10; // десятки
   uint8_t d0 = d % 10;  // единицы
@@ -118,8 +119,10 @@ bool CL_Display::showTimeWords(uint8_t d, uint8_t unit_t, bool st){
   }
 
   //print_buffer_shifed = print_buffer_size;
-  unsigned int _td = (_switchDelay * 100) - ((print_buffer_size+1) * 1 * _pd) - 0;
-  _TickerTail.once_ms(_td, std::bind(&CL_Display::_tail, this));
+  if(bitRead(config2, 1)){ // if enabled by config
+    unsigned int _td = (_switchDelay * 100) - ((print_buffer_size+1) * 1 * _pd) - 0;
+    _TickerTail.once_ms(_td, std::bind(&CL_Display::_tail, this));
+  }
 //  Serial.printf("print_buffer_size = %d\r\n",print_buffer_size);
 //  Serial.printf("_TickerTail.once_ms(%d, std::bind(&CL_Display::_tail, this))\r\n",_td);
   return true;  

@@ -89,6 +89,7 @@ EEPROM map
 
 0x05 - led strip config byte #2
   0: Leading One
+  1: Tail clear
 
 Color
 0x0D = 13 - Hue

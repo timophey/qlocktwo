@@ -51,6 +51,7 @@ class App_Colors extends App_Common{
 
         let byte_conf2keys = {
             0: 'Leading One',
+            1: 'Tail clear',
         }
 
         let byte_conf1bin = parseInt(ee[0x03]).toString(2);
