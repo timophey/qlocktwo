@@ -132,7 +132,9 @@ void CL_Display::showProgress(uint8_t p){
   for(uint8_t i=0; i<NUM_LEDS; i++) leds[i] = CRGB::Black;
   for(uint8_t i=0; i<p; i++){
     uint8_t hue = (255 / 100) * (p-i);
-    leds[i] = CHSV(hue,220,220-p);
+    uint8_t L = i;
+    if((int)(L / 10) % 2 > 0) L = ((int)(L / 10)+1)*10 - (L%10 + 1);
+    leds[L] = CHSV(hue,220,220-p);
   }
   FastLED.show();
   if(p == 100){
@@ -142,11 +144,16 @@ void CL_Display::showProgress(uint8_t p){
       leds[100+i] = CRGB(128,128,220 / 10 * (i+1));
       FastLED.show();
     }  
-    for(uint8_t i=0; i<NUM_LEDS; i++){
-        leds[i] = CRGB::Black;
-        FastLED.show();
-        delay(10);
+    for(uint8_t i=0; i<21; i++){
+      for(uint8_t j=0;j<i+1; j++){
+        uint8_t L = i + j * 10 - j;
+        if((int)(L / 10) % 2 > 0) L = ((int)(L / 10)+1)*10 - (L%10 + 1);
+        if(L >= 110) continue;
+        leds[L] = CRGB::Black;
         }
+        FastLED.show();
+        delay(25);
+      }
     }
   }
 
