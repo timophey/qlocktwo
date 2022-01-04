@@ -72,6 +72,7 @@ class App_Colors extends App_Common{
 
         return <ul className="qlocktwo__letters text-left">
             <li className="pop_header text-right">
+                <a href="/man/color.html"><span className="icon-help_outline"></span></a>
                 <a href="/"><span className="icon-house"></span></a>
             </li>
             <li className="i-split">Таймеры</li>
