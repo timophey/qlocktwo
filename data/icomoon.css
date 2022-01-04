@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('icomoon.eot?pgu5bm');
-  src:  url('icomoon.eot?pgu5bm#iefix') format('embedded-opentype'),
-  url('icomoon.ttf?pgu5bm') format('truetype'),
-  url('icomoon.woff?pgu5bm') format('woff'),
-  url('icomoon.svg?pgu5bm#icomoon') format('svg');
+  src:  url('icomoon.eot?b5tjqh');
+  src:  url('icomoon.eot?b5tjqh#iefix') format('embedded-opentype'),
+    url('icomoon.ttf?b5tjqh') format('truetype'),
+    url('icomoon.woff?b5tjqh') format('woff'),
+    url('icomoon.svg?b5tjqh#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,72 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-help_outline:before {
+  content: "\e92c";
+}
+.icon-check_circle_outline1:before {
+  content: "\e926";
+}
+.icon-check_box_outline_blank1:before {
+  content: "\e929";
+}
+.icon-check_circle_outline:before {
+  content: "\e924";
+}
+.icon-check_box_outline_blank:before {
+  content: "\e92a";
+}
+.icon-settings_backup_restore:before {
+  content: "\e90b";
+}
+.icon-color_lens:before {
+  content: "\e90a";
+}
+.icon-palette:before {
+  content: "\e90a";
+}
+.icon-power_off:before {
+  content: "\e900";
+}
+.icon-flash_on:before {
+  content: "\e901";
+}
+.icon-flash_off:before {
+  content: "\e902";
+}
+.icon-question-circle-o:before {
+  content: "\e92b";
+}
+.icon-bell-o:before {
+  content: "\e922";
+}
+.icon-bell1:before {
+  content: "\e923";
+}
+.icon-arrow-circle-o-left:before {
+  content: "\e915";
+}
+.icon-arrow-circle-o-right:before {
+  content: "\e916";
+}
+.icon-arrow-circle-o-up:before {
+  content: "\e917";
+}
+.icon-arrow-circle-o-down:before {
+  content: "\e918";
+}
+.icon-clone:before {
+  content: "\e914";
+}
+.icon-arrows-h:before {
+  content: "\e913";
+}
+.icon-paint-brush:before {
+  content: "\e90d";
+}
+.icon-key:before {
+  content: "\e904";
+}
 .icon-vk:before {
   content: "\e928";
 }
@@ -123,66 +189,6 @@
 }
 .icon-loop2:before {
   content: "\ea2e";
-}
-.icon-check_circle_outline1:before {
-  content: "\e926";
-}
-.icon-check_box_outline_blank1:before {
-  content: "\e929";
-}
-.icon-check_circle_outline:before {
-  content: "\e924";
-}
-.icon-check_box_outline_blank:before {
-  content: "\e92a";
-}
-.icon-settings_backup_restore:before {
-  content: "\e90b";
-}
-.icon-color_lens:before {
-  content: "\e90a";
-}
-.icon-palette:before {
-  content: "\e90a";
-}
-.icon-power_off:before {
-  content: "\e900";
-}
-.icon-flash_on:before {
-  content: "\e901";
-}
-.icon-flash_off:before {
-  content: "\e902";
-}
-.icon-bell-o:before {
-  content: "\e922";
-}
-.icon-bell1:before {
-  content: "\e923";
-}
-.icon-arrow-circle-o-left:before {
-  content: "\e915";
-}
-.icon-arrow-circle-o-right:before {
-  content: "\e916";
-}
-.icon-arrow-circle-o-up:before {
-  content: "\e917";
-}
-.icon-arrow-circle-o-down:before {
-  content: "\e918";
-}
-.icon-clone:before {
-  content: "\e914";
-}
-.icon-arrows-h:before {
-  content: "\e913";
-}
-.icon-paint-brush:before {
-  content: "\e90d";
-}
-.icon-key:before {
-  content: "\e904";
 }
 .icon-aircraft-take-off:before {
   content: "\e919";
