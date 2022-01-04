@@ -48,6 +48,7 @@ void CL_App::setup(){
   this->Network->Server81.onStartDisplayTimers([this](bool i){ if(i){this->setDisplayTimer();}else{this->stopDisplayTimer();}});
   this->Network->Server81.onLightsOff([this](){ this->Display->lightsDown(); });
   this->Network->Server81.onReload(std::bind(&CL_App::reLoadHandler, this));
+  this->Network->Server81.onSetDisplayMode(std::bind(&CL_App::setDisplayMode, this, _1));
   this->Network->Server81.onConfig([this](uint8_t i, bool write){ 
     if(write){this->Config->save(i);}else{this->Config->load(i);}
     });
@@ -114,6 +115,36 @@ void CL_App::setSwitchTimer(){
   this->_switchDelay = this->Display->_switchDelay * 100;
   _TickerHM.attach_ms_scheduled( _switchDelay ,std::bind(&CL_App::scheduledHourMin, this)); // 5000  
   }
+
+void CL_App::setDisplayMode(uint8_t m){
+  
+  // stop
+  switch(this->displayMode){
+    case 0:
+      stopDisplayTimer();
+      break;
+    case 2:
+      Demo.stop();
+      break;
+    }
+ 
+  // setValue
+  this->displayMode = m;
+
+  // start
+  switch(m){
+    case 0:
+      setDisplayTimer(); // HM Standart mode
+      break;
+    case 2:
+      Demo.setup(this->Display->leds);
+      Demo.begin();
+      break;
+    }
+//  for(uint8_t i=0;i<7;i++) this->Device->nixie[i].off();
+//  this->update();
+};
+
 
 void CL_App::stopDisplayTimer(){
   _Ticker500.detach();

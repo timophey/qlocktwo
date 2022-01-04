@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include "CL_Config.h"
 #include "CL_Cron.h"
+#include "CL_Demo.h"
 
 
 class CL_App{
@@ -21,6 +22,7 @@ class CL_App{
       void showTimeWords(void);
       void showNumberTest();
       void shareWSnow(void);
+      void setDisplayMode(uint8_t);
 
       void setDisplayTimer(void);
       void setSwitchTimer(void);
@@ -42,10 +44,13 @@ class CL_App{
       CL_Wire i2c;
       CL_Config* Config;
       CL_Cron* Cron;
+      CL_Demo Demo;
       
       bool ss = false;
       bool st = false;
       uint8_t numb = 0;
+      // displayMode {0:'Time',1:'TestMatrix',2:'ColorPalette'}
+      uint8_t displayMode = 0;
 
       int _switchDelay = 5000;
   };

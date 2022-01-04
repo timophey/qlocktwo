@@ -402,3 +402,33 @@ class RangePeaker extends Component_Common{
         // return this.wrapChildren(element);
     }
 }
+
+class ActionButton extends React.Component{
+    /*
+    * cmd:
+    * label:
+    * subclass: [primary, secondary, success, danger, warning, info, light, dark, link]
+    * // https://getbootstrap.com/docs/4.0/components/buttons/
+    * */
+    eventClick(e){
+        sendWS({cmd:this.props.cmd,value: this.props.value});
+    }
+
+    render(){
+        let className="btn";
+        if(this.props.subclass !== undefined){
+            if(typeof this.props.subclass == "string") className+=" btn-"+this.props.subclass;
+        }
+        var but_label = this.props.label;
+        if(this.props['data-loc']){
+            var loc_key = this.props['data-loc'];
+            if('locale' in window) if(loc_key in locale){
+                // console.log(this.props);
+                if(this.props.label !== undefined)
+                    but_label = locale[loc_key];
+            }
+        }
+        // console.log(this.props) className={className}
+        return <a onClick={this.eventClick.bind(this)}>{but_label}</a>
+    }
+}

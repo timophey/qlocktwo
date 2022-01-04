@@ -10,7 +10,8 @@
     <link rel="shortcut icon" href="/favicon.jpg">
     <link rel="apple-touch-icon" href="/favicon.jpg"/>
     <script src="locale.js"></script>
-    <!--        <script src="react-with-dom.min.js"></script>-->
+    <script src="babel.min.js"></script>
+    <script src="react-with-dom.min.js"></script>
     <link rel="stylesheet" href="qlocktwo.css">
     <link rel="stylesheet" href="font.css">
 </head>
@@ -20,10 +21,9 @@
             class="qlocktwo qlocktwo--touch qlocktwo--text qlocktwo--reflection__ qlocktwo--shadow qlocktwo--fill-screen qlocktwo--lang-RU"
             style="color:rgba(255,255,255, 0.2);min-height: auto;">
         <span class="qlocktwo__dots dots--0 light">●</span><span class="qlocktwo__dots dots--1 light">●</span><span class="qlocktwo__dots dots--2 light">●</span><span class="qlocktwo__dots dots--3 light">●</span>
-        <ul class="qlocktwo__letters">
-            <li><a href="test.matrix.html">Matrix</a></li>
-
-        </ul>
+        <div id="app" class="playground"></div>
+        <script type="text/babel" src="app.common.jsx"></script>
+        <script type="text/babel" src="test.jsx"></script>
     </div>
 </div>
 </body>
