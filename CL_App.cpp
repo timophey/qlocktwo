@@ -206,7 +206,7 @@ void CL_App::demo(){
 
 void CL_App::setTime(int s, int i, int h, int dOw, int d, int m, int y){
     if(!this->i2c.i2c_rtc_addr) return;
-    Serial.printf("CL_App::setTime %d-%d-%d &d:%d:%d [%d]\n\r",y,m,d,h,i,s,dOw);
+    Serial.printf("CL_App::setTime %d-%d-%d %d:%d:%d [%d]\n\r",y,m,d,h,i,s,dOw);
     this->i2c.rtc->set(s,i,h,dOw,d,m,y);
     this->i2c.i2c_rtc_serialprint();
   }

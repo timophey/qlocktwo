@@ -35,7 +35,7 @@ void CL_Display::setTimers(){
         _TickerCandle.detach();
         }
     }
-  uint8_t _pd = EEPROM.read(0x16); if(_pd == 0 || _pd == 255) _pd = 64;
+  _pd = EEPROM.read(0x16); if(_pd == 0 || _pd == 255) _pd = 64;
   _TickerPrint.attach_ms_scheduled(_pd, std::bind(&CL_Display::_type, this));
   }
   
@@ -48,8 +48,9 @@ void CL_Display::stopTimers(){
 
 bool CL_Display::showTimeWords(uint8_t d, uint8_t unit_t, bool st){
    bool is_min = (unit_t > 1);
-//  Serial.printf("showTimeWords %d \n\r",d);
+//  Serial.printf("showTimeWords %d \r\n",d);
   this->lightsDown();
+//  this->_tail(); // _tail scheduled once below
 
   uint8_t d10 = d / 10; // десятки
   uint8_t d0 = d % 10;  // единицы
@@ -117,6 +118,10 @@ bool CL_Display::showTimeWords(uint8_t d, uint8_t unit_t, bool st){
   }
 
   //print_buffer_shifed = print_buffer_size;
+  unsigned int _td = (_switchDelay * 100) - ((print_buffer_size+1) * 1 * _pd) - 0;
+  _TickerTail.once_ms(_td, std::bind(&CL_Display::_tail, this));
+//  Serial.printf("print_buffer_size = %d\r\n",print_buffer_size);
+//  Serial.printf("_TickerTail.once_ms(%d, std::bind(&CL_Display::_tail, this))\r\n",_td);
   return true;  
   }
 
@@ -133,9 +138,15 @@ void CL_Display::showProgress(uint8_t p){
       delay(tt); tt/=2;
       leds[100+i] = CRGB(128,128,220 / 10 * (i+1));
       FastLED.show();
+    }  
+    for(uint8_t i=0; i<NUM_LEDS; i++){
+        leds[i] = CRGB::Black;
+        FastLED.show();
+        delay(10);
+        }
     }
   }
-}
+
 
 void CL_Display::lightsDown(){
   for(uint8_t i=0; i<NUM_LEDS; i++){
@@ -267,19 +278,23 @@ void CL_Display::CandleHSV(){
   }
 
 void CL_Display::type(uint8_t l){
-  print_buffer[print_buffer_size] = l;  
+  print_buffer[print_buffer_size] = l;
   print_buffer_size++;
   }
 
 void CL_Display::_type(){
   if(print_buffer_size == 0) return; // CRGB::White;//
   uint8_t l = print_buffer[0]; 
-  if(bitRead(config2, 0)){
+  if(bitRead(config2, 0)){ /* if leading one */
     if(l    != _LPPL) leds[l] = lead_color;//CRGB(main_color.r,main_color.g,main_color.b);
     if(_LPP != _LPPL) leds[_LPP] = main_color;
   }else{
     if(l    != _LPPL) leds[l] = main_color;//CRGB(main_color.r,main_color.g,main_color.b);
     }
+  
+  // store in another buffer
+  shift_buffer[shift_buffer_size] = l;
+  shift_buffer_size++;
 
   // 
   _LPP = l;
@@ -293,13 +308,18 @@ void CL_Display::_type(){
   frameReady();
   }
 
+void CL_Display::_tail(){
+  uint8_t l = shift_buffer[0];
+  leds[l] = CRGB::Black;
+  for(uint8_t i=0; i < shift_buffer_size; i++) shift_buffer[i] = shift_buffer[i+1]; shift_buffer_size--;
+  if(shift_buffer_size > 1) _TickerTail.once_ms(_pd, std::bind(&CL_Display::_tail, this));
+//  Serial.printf("CL_Display::_tail -> shift_buffer_size = %d\r\n",shift_buffer_size);
+//  Serial.printf("print_buffer_size = %d\r\n",print_buffer_size);
+  }
+
 void CL_Display::printBuffer(){
   while(print_buffer_size){_type();FastLED.show();delay(_delayFrame*2);}
 }
-
-void CL_Display::_clear(bool tail){
-  
-  }
 
 void CL_Display::frameReady(){_frameReady=true;}
 void CL_Display::showFastLED(){if(_frameReady){FastLED.show();_frameReady=false;/*delay(5);*/}}

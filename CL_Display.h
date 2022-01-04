@@ -20,6 +20,7 @@ class CL_Display{
     void lightsDown();
     void type(uint8_t);
     void _type(void);
+    void _tail(void);
     void _clear(bool);
     bool showTimeWords(uint8_t d, uint8_t unit_t = 0, bool st=false); /* unit: 0 = none, 1 = hourm 2 = minute */
     void showProgress(uint8_t);
@@ -45,6 +46,8 @@ class CL_Display{
     Ticker _TickerFrame;
     Ticker _TickerCandle;
     Ticker _TickerPrint;
+    Ticker _TickerTail;
+
     uint8_t _LPP = 1;  // last Printed Pixel
     uint8_t _LPPL = 1; // last Printed Pixel by default
 
@@ -53,6 +56,7 @@ class CL_Display{
     uint8_t _downdCandle = 64;
     uint8_t _stepdCandle = 1;
     uint8_t _switchDelay = 50;
+    uint8_t _pd;
     
     uint8_t _delayPrint = 64;
     uint8_t config;
