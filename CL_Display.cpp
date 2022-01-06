@@ -122,11 +122,11 @@ bool CL_Display::showTimeWords(uint8_t d, uint8_t unit_t, bool st){
   if(bitRead(config2, 1)){ // if enabled by config
     unsigned int _td = (_switchDelay * 100) - ((print_buffer_size+1) * 1 * _pd) - 0;
     _TickerTail.once_ms(_td, std::bind(&CL_Display::_tail, this));
-  }
 //  Serial.printf("print_buffer_size = %d\r\n",print_buffer_size);
 //  Serial.printf("_TickerTail.once_ms(%d, std::bind(&CL_Display::_tail, this))\r\n",_td);
-  return true;  
   }
+  return true;  
+}
 
 void CL_Display::showProgress(uint8_t p){
   for(uint8_t i=0; i<NUM_LEDS; i++) leds[i] = CRGB::Black;
@@ -321,10 +321,12 @@ void CL_Display::_type(){
 void CL_Display::_tail(){
   uint8_t l = shift_buffer[0];
   leds[l] = CRGB::Black;
+  frameReady();
   for(uint8_t i=0; i < shift_buffer_size; i++) shift_buffer[i] = shift_buffer[i+1]; shift_buffer_size--;
   if(shift_buffer_size > 1) _TickerTail.once_ms(_pd, std::bind(&CL_Display::_tail, this));
-//  Serial.printf("CL_Display::_tail -> shift_buffer_size = %d\r\n",shift_buffer_size);
-//  Serial.printf("print_buffer_size = %d\r\n",print_buffer_size);
+//  Serial.printf("CL_Display::_tail() >>> OFF %d\r\n",l);
+//  Serial.printf("CL_Display::_tail() >>> CL_Display::_tail -> shift_buffer_size = %d\r\n",shift_buffer_size);
+//  Serial.printf("CL_Display::_tail() >>> shift_buffer_size = %d\r\n",shift_buffer_size);
   }
 
 void CL_Display::printBuffer(){

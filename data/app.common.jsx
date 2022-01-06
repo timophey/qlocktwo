@@ -382,7 +382,7 @@ class RangePeaker extends Component_Common{
 
         var list = [];
         for(let i = this.props.min; i<=this.props.max; i++){
-            let classList = ["text-nowrap"];
+            let classList = [""];//text-nowrap
             if(i == this.props.value) classList.push("text-success");
             let el = <a key={i} className={classList.join(" ")} onClick={this.eventChange.bind(this,i)}><span>{('0' + i).slice(-String(this.props.max).length)}</span></a>;
             list.push( (!!this.props.w) ? this.wrapChildren(el) : el);

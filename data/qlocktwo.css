@@ -60,6 +60,7 @@ a{
 ul.qlocktwo__letters{
     list-style-type: none;
     margin:0;padding:0;
+    white-space: inherit;
 }
 .qlocktwo__letters span{width:1.3em}
 .qlocktwo__letters a{color:rgba(255,255,255, 0.2);}
