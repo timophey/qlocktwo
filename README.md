@@ -1,6 +1,7 @@
 # Word Clock! // Словесные часы (буквенные)
 
-This is yet another version of **[Qlocktwo](https://qlocktwo.com/)** built on ESP MCU.
+This is yet another version of **[Qlocktwo](https://qlocktwo.com/)** built on ESP8266 MCU.
+Demo page and docs: **[Демо страница](https://timophey.github.io/qlocktwo/)**
 
 ## Libraries for build backend // Библиотеки для сборки прошивки
  - [ESP8266 Arduino Core](https://github.com/esp8266/Arduino) (2.7.4)
@@ -30,12 +31,6 @@ This is yet another version of **[Qlocktwo](https://qlocktwo.com/)** built on ES
 
 ## Connect
 
-```mermaid
-graph LR
-A[ESP 8266 MCU] -- D3 -> --> B((WS2812))
-A <-- D2 -> SDA --> C(DS3231)
-A <-- D1 -> SCL --> C
-```
 ```
 ╔══════════════╗     ╔══════════╗
 ║              D1 -> SCL DS3231 ║
