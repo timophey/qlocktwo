@@ -40,11 +40,11 @@ class App_Demo extends React.Component{
         console.log(this.ss)
         this.ss = !this.ss;
     }
-    
+
     showTimeWords(d,unit_t){
         
         let is_min = (unit_t > 1);
-        let u00 = this.u00, u10 = this.u10, y00 = this.y00, y10 = this.y10, hl = this.hl, ml = this.ml;
+        let u00 = this.u00, u10 = this.u10, y00 = this.y00, y10 = this.y10, up = [], hl = this.hl, ml = this.ml;
         
         this.lightsDown();
 
@@ -83,7 +83,7 @@ class App_Demo extends React.Component{
             this.lightsUp(y00[d0],4); // одна/две/ 55 / 43
             }else{
             if(is_min && d0 == 15 ){ // 15 min
-                up[10] = [2,17,22,37,42,57,77,82,97,102];
+                up = [2,17,22,37,42,57,77,82,97,102];
                 this.lightsUp(up,10);
             }else
             if(is_min && (d10 == 2 || d10 == 4) && (d0 == 5)){ // 25,45 min
@@ -130,6 +130,8 @@ class App_Demo extends React.Component{
         for(let i = 0; i<len; i++){
             let l = ls[i];
             // leds[l] = true;
+            if(l===undefined) continue;
+            if(l==255 || l==0 && i>0) continue;
             this.print_buffer.push(l);
         }
         // this.setState({leds:leds});
