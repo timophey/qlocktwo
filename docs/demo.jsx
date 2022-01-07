@@ -37,7 +37,6 @@ class App_Demo extends React.Component{
         let m = now.getMinutes();
         let value = (this.ss) ? m : h;
         this.showTimeWords(value,(this.ss)?2:1);
-        console.log(this.ss)
         this.ss = !this.ss;
     }
 
@@ -122,6 +121,7 @@ class App_Demo extends React.Component{
 
     lightsDown(){
         this.setState({leds:[]});
+        this.print_buffer = [];
         this.shift_buffer = [];
     }
 
