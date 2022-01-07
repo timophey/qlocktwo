@@ -1,6 +1,7 @@
 # Word Clock! // Словесные часы (буквенные)
 
 This is yet another version of **[Qlocktwo](https://qlocktwo.com/)** built on ESP8266 MCU.
+
 Demo page and docs: **[Демо страница](https://timophey.github.io/qlocktwo/)**
 
 ## Libraries for build backend // Библиотеки для сборки прошивки
